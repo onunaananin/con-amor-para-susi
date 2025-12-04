@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karaoke Mensajes Completo</title>
+
+<style>
+    body {
+        background: rgb(0, 0, 0);
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        flex-direction: column;
+    }
+
+    .contenedor {
+        width: 90%;
+        max-width: 450px;
+        height: 70vh;
+        background: #ffd6e9;
+        border-radius: 18px;
+        padding: 20px;
+        overflow-y: auto;
+        box-shadow: 0 0 25px rgba(255, 150, 200, 0.7);
+        border: 3px solid #ff9ac6;
+        position: relative;
+    }
+
+    .contenedor::before,
+    .contenedor::after {
+        content: "💗";
+        font-size: 45px;
+        position: absolute;
+        opacity: 0.85;
+    }
+
+    .contenedor::before {
+        top: 10px;
+        right: 10px;
+    }
+
+    .contenedor::after {
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .mensaje {
+        background: white;
+        color: #0099cc;
+        padding: 12px 15px;
+        margin: 12px 0;
+        border-radius: 10px;
+        width: fit-content;
+        opacity: 0;
+        font-weight: bold;
+        box-shadow: 0 0 12px rgba(255, 120, 180, 0.5);
+        border: 2px solid #ffb6d5;
+        animation: aparecer 0.8s forwards;
+        position: relative;
+    }
+
+    @keyframes aparecer {
+        0% { opacity: 0; transform: translateY(18px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .palabra {
+        opacity: 0.25;
+        transition: 0.25s ease;
+        color: #0033cc;
+    }
+
+    .palabra.activa {
+        opacity: 1;
+        color: #0066ff;
+        text-shadow: 0 0 10px #6aa6ff;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- 🔊 MÚSICA AUTOMÁTICA -->
+<audio id="musica" src="musica.mp3" autoplay muted loop></audio>
+
+<div class="contenedor" id="chat"></div>
+
+<script>
+// 🔊 Forzar autoplay quitando el mute
+window.addEventListener("load", () => {
+    const audio = document.getElementById("musica");
+    setTimeout(() => {
+        audio.muted = false;
+        audio.play().catch(() => {});
+    }, 700);
+});
+
+let mensajes = [
+    { msg: "desde que llegaste todo cambio ,el tiemposer hizo suave, la risa mas sincera, ye el amor, mas real de lo que imaginaba" },
+    { msg: "no fuiste una casualidad , fuiste el abrazo que no sabia que necesitaba, la calma que llego sin avisar" },
+    { msg: "eres eso que no sabia que buscaba pero ahora no quiero perder.eres calma eres fuego , eres todo lo que me hace bien" },
+    { msg: "tu voz es hogar , tu mirada refugio y  cuando me hablas el mundo de detiene para escucharte" },
+    { msg: "nose escribir canciones pero si pudiera toda mis canciones hablarian de ti" },
+    { msg: "de tu risa que me salva y de tu. forma de hacerme feliz." },
+    { msg: "a tu lado entendi que amar no es perderse, es encontrar a alguien que ve tus sombras " },
+    { msg: "y aun asi eligue quedarse " },
+    { msg: "por que entre todas las personas, entre todos los caminos" },
+    { msg: "mo corazon supo que..." },
+    { msg: "siempre eras, eres y seras mi lugar favorito" },
+];
+
+let cont = document.getElementById("chat");
+let i = 0;
+
+function mostrarMensaje() {
+    if (i < mensajes.length) {
+
+        let div = document.createElement("div");
+        div.className = "mensaje";
+
+        let palabras = mensajes[i].msg.split(" ");
+
+        palabras.forEach((p) => {
+            let span = document.createElement("span");
+            span.textContent = p + " ";
+            span.className = "palabra";
+            div.appendChild(span);
+        });
+
+        cont.appendChild(div);
+
+        let spans = div.querySelectorAll(".palabra");
+        let idx = 0;
+
+        function activarPalabra() {
+            if (idx < spans.length) {
+                spans[idx].classList.add("activa");
+                idx++;
+                setTimeout(activarPalabra, 300);
+            }
+        }
+
+        activarPalabra();
+
+        cont.scrollTop = cont.scrollHeight;
+
+        i++;
+        setTimeout(mostrarMensaje, 1800);
+    }
+}
+
+mostrarMensaje();
+</script>
+
+</body>
+</html>
